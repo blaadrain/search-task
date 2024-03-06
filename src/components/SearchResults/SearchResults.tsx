@@ -1,16 +1,24 @@
-import { useContext } from "react";
-import { SearchContext } from "./SearchContext";
-import { UserCard } from "../UserCard/UserCard";
+import { useSearchContext } from './SearchContext';
+import { UserCard } from '../UserCard/UserCard';
+import { UserType } from '../../types';
 
-import "./style.css";
+import './style.css';
 
 export function SearchResults() {
-  const { users } = useContext(SearchContext);
+  const { users, isLoading } = useSearchContext();
+
+  if (isLoading) return <div className="usersList">Загрузка...</div>;
+  if (users.length === 0) {
+    return <div className="usersList">Ничего не найдено :(</div>;
+  }
 
   return (
     <div className="usersList">
-      {users.map((user) => (
-        <UserCard {...user} />
+      {users.map((user: UserType) => (
+        <UserCard
+          key={user.id}
+          {...user}
+        />
       ))}
     </div>
   );
